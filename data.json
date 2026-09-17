@@ -31,7 +31,13 @@
       "id": "mu5dy3zyhvm4i9",
       "name": "Jogos para Jojar :3",
       "color": "#7fe3b4",
-      "items": []
+      "items": [
+        {
+          "id": "mu5dyqjvfwm6vp",
+          "text": "Terminar Valhiem",
+          "checked": false
+        }
+      ]
     }
   ]
 }
