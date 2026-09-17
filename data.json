@@ -8,7 +8,7 @@
         {
           "id": "mu5cnbn2z1gifq",
           "text": "aaa",
-          "checked": true
+          "checked": false
         },
         {
           "id": "mu5cp1dskbqdt3",
@@ -58,7 +58,7 @@
         {
           "id": "mu5ddhy12ymo9s",
           "text": "kkk",
-          "checked": false
+          "checked": true
         }
       ]
     },
