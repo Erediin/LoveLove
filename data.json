@@ -4,7 +4,13 @@
       "id": "mu5dvzwk0907wj",
       "name": "Filmes para ver :D",
       "color": "#c9a6f5",
-      "items": []
+      "items": [
+        {
+          "id": "mu5dw63q5iqbw2",
+          "text": "Sinners",
+          "checked": false
+        }
+      ]
     }
   ]
 }
