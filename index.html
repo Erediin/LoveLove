@@ -488,6 +488,20 @@
     padding: 10px 20px 26px;
   }
 
+  .version-badge {
+    position: fixed;
+    right: 10px;
+    bottom: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: rgba(255,255,255,.7);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: 999px;
+    z-index: 5;
+  }
+
   @media (max-width: 480px) {
     .list-card, .add-list-card { width: 78vw; flex-basis: 78vw; }
   }
@@ -561,6 +575,7 @@
 </main>
 
 <footer>feito com carinho 🩷 guardado no GitHub</footer>
+<div class="version-badge" id="versionBadge"></div>
 
 <!-- Settings modal -->
 <div class="modal-backdrop" id="settingsModal">
@@ -623,7 +638,9 @@
 (function () {
   "use strict";
 
+  const SITE_VERSION = "1.3.0";
   const LS_KEY = "listas-casal-config-v1";
+  const PENDING_KEY = "listas-casal-pending-v1";
   const PALETTE = ["#ff8fab", "#ffb37b", "#ffd166", "#7fe3b4", "#7ec8f2", "#c9a6f5"];
 
   const el = (id) => document.getElementById(id);
@@ -676,6 +693,31 @@
   function persistConfig(cfg) { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
   function clearConfig() { localStorage.removeItem(LS_KEY); }
 
+  // ---------- pending-change safety net ----------
+  // Before trying to save to GitHub, we snapshot the current data locally.
+  // If the save actually succeeds, we clear the snapshot. If the tab gets
+  // closed or the connection drops before that happens, the next time the
+  // site is opened it finds the snapshot and tries to push it again,
+  // instead of just losing the change.
+  function sameRepo(a, b) {
+    return a && b && a.owner === b.owner && a.repo === b.repo && a.branch === b.branch && a.path === b.path;
+  }
+  function savePending() {
+    try {
+      localStorage.setItem(PENDING_KEY, JSON.stringify({
+        owner: config.owner, repo: config.repo, branch: config.branch, path: config.path,
+        data, savedAt: Date.now()
+      }));
+    } catch (e) { /* storage full or unavailable, worst case we just lose this safety net */ }
+  }
+  function clearPending() { localStorage.removeItem(PENDING_KEY); }
+  function readPending() {
+    try {
+      const raw = localStorage.getItem(PENDING_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+
   // ---------- GitHub API helpers ----------
   function apiUrl() {
     return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${encodeURIComponent(config.path)}`;
@@ -684,8 +726,17 @@
   function b64DecodeUtf8(b64) { return decodeURIComponent(escape(atob(b64))); }
 
   async function ghFetchFile() {
-    const res = await fetch(apiUrl() + `?ref=${encodeURIComponent(config.branch)}`, {
-      headers: { "Authorization": "Bearer " + config.token, "Accept": "application/vnd.github+json" }
+    // cache-busting: the browser (and GitHub's own edge) can otherwise serve
+    // a stale cached response right after a write, which caused both the
+    // 409 conflicts and items "disappearing" after a reload.
+    const bust = `_=${Date.now()}`;
+    const res = await fetch(apiUrl() + `?ref=${encodeURIComponent(config.branch)}&${bust}`, {
+      cache: "no-store",
+      headers: {
+        "Authorization": "Bearer " + config.token,
+        "Accept": "application/vnd.github+json",
+        "Cache-Control": "no-cache"
+      }
     });
     if (res.status === 404) return { notFound: true };
     if (!res.ok) {
@@ -707,6 +758,7 @@
 
     const res = await fetch(apiUrl(), {
       method: "PUT",
+      cache: "no-store",
       headers: {
         "Authorization": "Bearer " + config.token,
         "Accept": "application/vnd.github+json",
@@ -752,6 +804,23 @@
       connectPanel.style.display = "none";
       board.style.display = "flex";
       render();
+
+      // Did a previous session leave a change that never made it to GitHub?
+      const pending = readPending();
+      if (pending && sameRepo(pending, cfg)) {
+        data = pending.data;
+        render();
+        setStatus("busy", "salvando alteração pendente...");
+        try {
+          await trySaveWithRetries("Sincroniza alteração pendente", 3);
+          clearPending();
+          setStatus("ok", "salvo");
+        } catch (err) {
+          console.error(err);
+          scheduleBackgroundRetry("Sincroniza alteração pendente");
+        }
+      }
+
       return true;
     } catch (err) {
       setStatus("error", "erro de conexão");
@@ -783,19 +852,42 @@
     }
   }
 
+  let backgroundRetryTimer = null;
+  let backgroundRetryDelay = 4000;
+
+  function scheduleBackgroundRetry(message) {
+    if (backgroundRetryTimer) return; // already scheduled
+    setStatus("error", "sem conexão, tentando de novo...");
+    backgroundRetryTimer = setTimeout(async () => {
+      backgroundRetryTimer = null;
+      try {
+        await trySaveWithRetries(message, 1);
+        clearPending();
+        backgroundRetryDelay = 4000;
+        setStatus("ok", "salvo");
+      } catch (err) {
+        console.error(err);
+        backgroundRetryDelay = Math.min(backgroundRetryDelay * 1.6, 30000);
+        scheduleBackgroundRetry(message);
+      }
+    }, backgroundRetryDelay);
+  }
+
   async function withSave(mutator, message) {
     mutator();
     render();
+    savePending();
     if (saving) return;
     saving = true;
     setStatus("busy", "salvando...");
     try {
       await trySaveWithRetries(message, 3);
+      clearPending();
+      backgroundRetryDelay = 4000;
       setStatus("ok", "salvo");
     } catch (err) {
-      setStatus("error", "erro ao salvar");
       console.error(err);
-      alert("Não deu pra salvar agora: " + err.message);
+      scheduleBackgroundRetry(message);
     } finally {
       saving = false;
     }
@@ -1042,6 +1134,7 @@
   });
 
   // ---------- boot ----------
+  el("versionBadge").textContent = "v" + SITE_VERSION;
   const detected = autodetectRepo();
   if (detected) {
     el("cfgOwner").value = detected.owner;
