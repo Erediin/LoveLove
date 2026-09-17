@@ -4,7 +4,13 @@
       "id": "mu5ckvr3p7t59d",
       "name": "Filme",
       "color": "#ff8fab",
-      "items": []
+      "items": [
+        {
+          "id": "mu5cnbn2z1gifq",
+          "text": "aaa",
+          "checked": false
+        }
+      ]
     }
   ]
 }
