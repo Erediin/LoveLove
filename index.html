@@ -716,7 +716,9 @@
     });
     if (!res.ok) {
       const errBody = await res.text().catch(() => "");
-      throw new Error(`GitHub respondeu ${res.status} ao salvar. ${friendlyGhError(res.status, errBody)}`);
+      const err = new Error(`GitHub respondeu ${res.status} ao salvar. ${friendlyGhError(res.status, errBody)}`);
+      err.status = res.status;
+      throw err;
     }
     const json = await res.json();
     currentSha = json.content.sha;
@@ -761,6 +763,26 @@
   function showConnError(msg) { el("connError").textContent = msg; }
 
   // ---------- data mutations ----------
+  async function trySaveWithRetries(message, attemptsLeft) {
+    try {
+      await ghSaveFile(data, message);
+      return true;
+    } catch (err) {
+      // 409 = the sha we sent is out of date (someone/something else wrote to
+      // the file in between). Refresh the sha and try again a couple of
+      // times before bothering the user with it.
+      if (err.status === 409 && attemptsLeft > 0) {
+        await new Promise(r => setTimeout(r, 350));
+        try {
+          const latest = await ghFetchFile();
+          if (!latest.notFound) currentSha = latest.sha;
+        } catch (e) { /* fall through and retry with what we have */ }
+        return trySaveWithRetries(message, attemptsLeft - 1);
+      }
+      throw err;
+    }
+  }
+
   async function withSave(mutator, message) {
     mutator();
     render();
@@ -768,12 +790,7 @@
     saving = true;
     setStatus("busy", "salvando...");
     try {
-      try {
-        const latest = await ghFetchFile();
-        if (!latest.notFound) currentSha = latest.sha;
-      } catch (e) { /* ignore, try with sha we have */ }
-
-      await ghSaveFile(data, message);
+      await trySaveWithRetries(message, 3);
       setStatus("ok", "salvo");
     } catch (err) {
       setStatus("error", "erro ao salvar");
