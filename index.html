@@ -4,24 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coisas pra fazer juntos</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%A9%B7</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #12141c;
-    --surface: #1b1e29;
-    --surface-2: #242837;
-    --border: #323748;
-    --text: #edeef2;
-    --text-muted: #8b90a3;
-    --accent: #f2637b;
-    --accent-soft: rgba(242, 99, 123, .15);
-    --done: #6fe3b4;
-    --radius: 14px;
-    --font-display: "Fraunces", serif;
-    --font-body: "Manrope", sans-serif;
+    --bg-a: #fff0f5;
+    --bg-b: #f2ecff;
+    --surface: #ffffff;
+    --surface-2: #fff5f8;
+    --border: #ffd9e6;
+    --text: #4a3b47;
+    --text-muted: #a891a0;
+    --accent: #ff5c8a;
+    --accent-soft: rgba(255, 92, 138, .13);
+    --done: #6fcf9e;
+    --radius: 18px;
+    --font-display: "Baloo 2", sans-serif;
+    --font-body: "Nunito", sans-serif;
   }
 
   * { box-sizing: border-box; }
@@ -29,25 +30,21 @@
   html, body {
     margin: 0;
     padding: 0;
-    background: var(--bg);
+    min-height: 100vh;
     color: var(--text);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
   }
 
   body {
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 100%);
+    background-attachment: fixed;
   }
 
   a { color: inherit; }
-
-  button {
-    font-family: inherit;
-    cursor: pointer;
-  }
-
+  button { font-family: inherit; cursor: pointer; }
   ::selection { background: var(--accent-soft); }
 
   /* ---------- Top bar ---------- */
@@ -56,38 +53,44 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px clamp(20px, 5vw, 56px) 10px;
+    padding: 30px clamp(20px, 5vw, 56px) 12px;
     gap: 16px;
+  }
+
+  .brand { display: flex; align-items: center; gap: 12px; }
+
+  .brand .heart {
+    font-size: 30px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 3px rgba(255, 92, 138, .35));
   }
 
   .brand h1 {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(26px, 3.4vw, 34px);
-    margin: 0 0 2px;
-    letter-spacing: .2px;
+    font-weight: 700;
+    font-size: clamp(24px, 3.4vw, 32px);
+    margin: 0;
+    color: #ff4d81;
   }
 
   .brand p {
-    margin: 0;
+    margin: 2px 0 0;
     color: var(--text-muted);
-    font-size: 14px;
+    font-size: 13.5px;
+    font-weight: 600;
   }
 
-  .topbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+  .topbar-actions { display: flex; align-items: center; gap: 10px; }
 
   .status-pill {
     display: flex;
     align-items: center;
     gap: 7px;
     font-size: 12.5px;
+    font-weight: 700;
     color: var(--text-muted);
-    padding: 6px 12px;
-    border: 1px solid var(--border);
+    padding: 7px 14px;
+    border: 1.5px solid var(--border);
     border-radius: 999px;
     background: var(--surface);
     white-space: nowrap;
@@ -101,53 +104,56 @@
     flex-shrink: 0;
   }
   .status-dot.ok { background: var(--done); }
-  .status-dot.busy { background: #f2c063; animation: pulse 1s infinite ease-in-out; }
+  .status-dot.busy { background: #ffc266; animation: pulse 1s infinite ease-in-out; }
   .status-dot.error { background: var(--accent); }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: .35; }
-  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
 
   .icon-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
     background: var(--surface);
-    color: var(--text-muted);
+    color: #ff81a3;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color .15s, color .15s;
+    transition: transform .15s, border-color .15s;
   }
-  .icon-btn:hover { border-color: var(--accent); color: var(--text); }
-  .icon-btn svg { width: 18px; height: 18px; }
+  .icon-btn:hover { border-color: var(--accent); transform: translateY(-1px) rotate(-8deg); }
+  .icon-btn svg { width: 19px; height: 19px; }
 
-  /* ---------- Board ---------- */
+  /* ---------- Board (Trello-like row) ---------- */
 
-  main {
-    flex: 1;
-    padding: 20px clamp(20px, 5vw, 56px) 60px;
-  }
+  main { flex: 1; padding: 16px 0 60px; min-width: 0; }
 
   .board {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     align-items: flex-start;
-    gap: 20px;
+    gap: 18px;
+    overflow-x: auto;
+    padding: 8px clamp(20px, 5vw, 56px) 24px;
+    scroll-snap-type: x proximity;
   }
 
+  .board::-webkit-scrollbar { height: 10px; }
+  .board::-webkit-scrollbar-track { background: transparent; }
+  .board::-webkit-scrollbar-thumb { background: #ffcfe0; border-radius: 10px; }
+
   .list-card {
-    width: 300px;
+    width: 280px;
+    flex: 0 0 280px;
+    scroll-snap-align: start;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     border-radius: var(--radius);
-    border-top: 3px solid var(--list-color, var(--accent));
-    padding: 18px 18px 14px;
+    box-shadow: 0 6px 18px rgba(255, 140, 170, .12);
+    padding: 16px 16px 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .list-card-head {
@@ -157,47 +163,73 @@
     gap: 8px;
   }
 
-  .list-title-wrap { min-width: 0; }
+  .list-title-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+
+  .color-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: none;
+    background: var(--list-color, var(--accent));
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--list-color, var(--accent));
+    transition: transform .12s;
+  }
+  .color-dot:hover { transform: scale(1.15); }
 
   .list-card h2 {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 19px;
+    font-weight: 600;
+    font-size: 18px;
     margin: 0;
     word-break: break-word;
   }
 
   .list-progress {
-    margin-top: 3px;
-    font-size: 12px;
+    margin-top: 2px;
+    font-size: 11.5px;
+    font-weight: 700;
     color: var(--text-muted);
   }
+
+  .list-header-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
 
   .list-menu-btn {
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1;
     padding: 2px 6px;
-    border-radius: 6px;
-    flex-shrink: 0;
+    border-radius: 8px;
   }
   .list-menu-btn:hover { color: var(--accent); background: var(--surface-2); }
 
-  .items {
+  .color-swatch-row {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-height: 4px;
+    gap: 7px;
+    flex-wrap: wrap;
+    padding: 4px 2px 2px;
   }
+  .swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform .12s, border-color .12s;
+  }
+  .swatch:hover { transform: scale(1.12); }
+  .swatch.active { border-color: var(--text); }
+
+  .items { display: flex; flex-direction: column; gap: 1px; min-height: 4px; }
 
   .item {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    padding: 7px 4px;
-    border-radius: 8px;
+    gap: 9px;
+    padding: 7px 6px;
+    border-radius: 10px;
     transition: background .12s;
   }
   .item:hover { background: var(--surface-2); }
@@ -206,36 +238,34 @@
   .item-check {
     appearance: none;
     -webkit-appearance: none;
-    width: 19px;
-    height: 19px;
-    min-width: 19px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
     margin-top: 1px;
-    border-radius: 6px;
-    border: 1.5px solid var(--border);
-    background: var(--bg);
+    border-radius: 7px;
+    border: 2px solid var(--border);
+    background: #fff;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color .15s, background .15s;
+    transition: border-color .15s, background .15s, transform .1s;
   }
-  .item-check:hover { border-color: var(--done); }
-  .item-check:checked {
-    background: var(--done);
-    border-color: var(--done);
-  }
+  .item-check:hover { border-color: var(--done); transform: scale(1.06); }
+  .item-check:checked { background: var(--done); border-color: var(--done); }
   .item-check:checked::after {
     content: "";
     width: 5px;
     height: 9px;
-    border-right: 2px solid #12141c;
-    border-bottom: 2px solid #12141c;
+    border-right: 2.5px solid #fff;
+    border-bottom: 2.5px solid #fff;
     transform: rotate(45deg) translate(-1px, -1px);
   }
 
   .item-text {
     flex: 1;
     font-size: 14.5px;
+    font-weight: 600;
     line-height: 1.4;
     word-break: break-word;
     padding-top: 1px;
@@ -245,6 +275,7 @@
     color: var(--text-muted);
     text-decoration: line-through;
     text-decoration-color: var(--border);
+    font-weight: 600;
   }
 
   .item-delete {
@@ -252,120 +283,109 @@
     background: none;
     border: none;
     color: var(--text-muted);
-    font-size: 16px;
+    font-size: 17px;
     padding: 0 4px;
     transition: opacity .12s, color .12s;
   }
   .item-delete:hover { color: var(--accent); }
 
-  .add-item-form {
-    display: flex;
-    gap: 6px;
-    margin-top: 4px;
-  }
+  .add-item-form { display: flex; gap: 6px; margin-top: 2px; }
 
   .add-item-form input {
     flex: 1;
     min-width: 0;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
     color: var(--text);
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: 10px;
+    padding: 8px 12px;
     font-size: 13.5px;
+    font-weight: 600;
     font-family: inherit;
   }
-  .add-item-form input:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
+  .add-item-form input::placeholder { color: var(--text-muted); font-weight: 600; }
+  .add-item-form input:focus { outline: none; border-color: var(--accent); }
 
   .add-item-form button {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    border-radius: 8px;
-    width: 34px;
-    font-size: 16px;
+    background: var(--accent);
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    width: 36px;
+    font-size: 17px;
+    font-weight: 700;
   }
-  .add-item-form button:hover { border-color: var(--accent); color: var(--accent); }
+  .add-item-form button:hover { filter: brightness(1.08); }
 
-  .empty-hint {
-    font-size: 13px;
-    color: var(--text-muted);
-    padding: 4px;
-  }
+  .empty-hint { font-size: 13px; font-weight: 600; color: var(--text-muted); padding: 4px 6px; }
 
   /* Add list card */
   .add-list-card {
-    width: 300px;
-    min-height: 120px;
-    border: 1.5px dashed var(--border);
+    width: 220px;
+    flex: 0 0 220px;
+    min-height: 130px;
+    scroll-snap-align: start;
+    border: 2px dashed #ffc2d6;
     border-radius: var(--radius);
-    background: transparent;
-    color: var(--text-muted);
+    background: rgba(255,255,255,.4);
+    color: #ff5c8a;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    transition: border-color .15s, color .15s;
-  }
-  .add-list-card:hover { border-color: var(--accent); color: var(--text); }
-  .add-list-card .plus {
+    gap: 6px;
     font-family: var(--font-display);
-    font-size: 30px;
-    line-height: 1;
+    font-weight: 600;
+    font-size: 15px;
+    transition: transform .15s, background .15s;
   }
+  .add-list-card:hover { transform: translateY(-2px); background: rgba(255,255,255,.7); }
+  .add-list-card .plus { font-size: 30px; line-height: 1; }
 
   /* ---------- Empty / not-connected state ---------- */
 
   .connect-panel {
-    max-width: 480px;
-    margin: 40px auto;
+    max-width: 460px;
+    margin: 32px auto;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 26px;
+    border: 1.5px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(255, 140, 170, .15);
+    padding: 30px 26px;
   }
+
+  .connect-panel .heart-big { font-size: 34px; display: block; margin-bottom: 6px; }
 
   .connect-panel h2 {
     font-family: var(--font-display);
-    font-weight: 500;
-    font-size: 21px;
+    font-weight: 700;
+    font-size: 22px;
     margin: 0 0 6px;
+    color: #ff4d81;
   }
 
   .connect-panel > p {
     color: var(--text-muted);
     font-size: 14px;
+    font-weight: 600;
     line-height: 1.5;
     margin: 0 0 20px;
   }
 
-  .field {
-    margin-bottom: 14px;
-  }
-  .field label {
-    display: block;
-    font-size: 12.5px;
-    color: var(--text-muted);
-    margin-bottom: 5px;
-  }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 5px; }
   .field input {
     width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
     color: var(--text);
-    border-radius: 9px;
-    padding: 10px 12px;
+    border-radius: 12px;
+    padding: 11px 13px;
     font-size: 14px;
+    font-weight: 600;
     font-family: inherit;
   }
   .field input:focus { outline: none; border-color: var(--accent); }
-  .field small { color: var(--text-muted); font-size: 11.5px; }
 
   .field-row { display: flex; gap: 10px; }
   .field-row .field { flex: 1; }
@@ -374,73 +394,72 @@
     width: 100%;
     background: var(--accent);
     border: none;
-    color: #1a0d10;
-    font-weight: 700;
+    color: #fff;
+    font-weight: 800;
     font-size: 14.5px;
-    padding: 11px;
-    border-radius: 9px;
+    padding: 13px;
+    border-radius: 13px;
     margin-top: 4px;
+    box-shadow: 0 6px 14px rgba(255, 92, 138, .35);
   }
-  .primary-btn:hover { filter: brightness(1.08); }
-  .primary-btn:disabled { opacity: .6; cursor: default; }
+  .primary-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .primary-btn:disabled { opacity: .6; cursor: default; transform: none; }
 
-  .conn-error {
+  .conn-error { font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 12px; line-height: 1.4; }
+
+  details.advanced {
+    margin-top: 14px;
     font-size: 13px;
-    color: var(--accent);
-    margin-top: 12px;
-    line-height: 1.4;
   }
-
-  details.token-help {
-    margin-top: 18px;
-    font-size: 13px;
+  details.advanced summary {
+    cursor: pointer;
     color: var(--text-muted);
+    font-weight: 700;
   }
-  details.token-help summary { cursor: pointer; color: var(--text); }
-  details.token-help ol { padding-left: 18px; line-height: 1.6; }
+  details.advanced .field-row { margin-top: 12px; }
 
-  /* ---------- Settings modal ---------- */
+  /* ---------- Settings / new-list modal ---------- */
 
   .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(6, 7, 11, .6);
+    background: rgba(90, 30, 55, .28);
     display: none;
     align-items: flex-start;
     justify-content: center;
     padding: 8vh 20px;
     z-index: 50;
+    backdrop-filter: blur(2px);
   }
   .modal-backdrop.open { display: flex; }
 
   .modal {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
     width: 100%;
-    max-width: 440px;
+    max-width: 420px;
     padding: 24px;
+    box-shadow: 0 16px 40px rgba(255, 100, 150, .2);
   }
   .modal h2 {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: 20px;
     margin: 0 0 16px;
+    color: #ff4d81;
   }
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 8px; }
   .modal-actions .primary-btn { margin-top: 0; }
   .secondary-btn {
     flex: 1;
     background: transparent;
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     color: var(--text-muted);
-    border-radius: 9px;
-    padding: 11px;
+    border-radius: 13px;
+    padding: 12px;
     font-size: 14px;
+    font-weight: 700;
   }
   .secondary-btn:hover { color: var(--text); border-color: var(--text-muted); }
 
@@ -448,7 +467,8 @@
     display: block;
     text-align: center;
     margin-top: 16px;
-    font-size: 12.5px;
+    font-size: 12px;
+    font-weight: 700;
     color: var(--text-muted);
     text-decoration: underline;
     background: none;
@@ -457,15 +477,19 @@
   }
   .forget-link:hover { color: var(--accent); }
 
+  .new-list-swatches { display: flex; gap: 10px; flex-wrap: wrap; margin: 4px 0 18px; }
+  .new-list-swatches .swatch { width: 30px; height: 30px; }
+
   footer {
     text-align: center;
     color: var(--text-muted);
-    font-size: 12px;
-    padding: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 10px 20px 26px;
   }
 
   @media (max-width: 480px) {
-    .list-card, .add-list-card { width: 100%; }
+    .list-card, .add-list-card { width: 78vw; flex-basis: 78vw; }
   }
 </style>
 </head>
@@ -473,8 +497,11 @@
 
 <header class="topbar">
   <div class="brand">
-    <h1>Coisas pra fazer juntos</h1>
-    <p id="subtitle">jogos, filmes e tudo mais que a gente quer riscar da lista</p>
+    <span class="heart">🩷</span>
+    <div>
+      <h1>Coisas pra fazer juntos</h1>
+      <p id="subtitle">jogos, filmes e tudo mais que a gente quer riscar da lista</p>
+    </div>
   </div>
   <div class="topbar-actions">
     <div class="status-pill" id="statusPill">
@@ -482,7 +509,7 @@
       <span id="statusText">desconectado</span>
     </div>
     <button class="icon-btn" id="settingsBtn" title="Configurações">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
 </header>
@@ -491,45 +518,40 @@
 
   <!-- Not connected yet -->
   <div class="connect-panel" id="connectPanel">
+    <span class="heart-big">💗</span>
     <h2>Conectar ao GitHub</h2>
-    <p>As listas ficam guardadas num arquivo dentro de um repositório do GitHub. Preencha os dados abaixo pra conectar — cada pessoa faz isso uma vez no próprio navegador.</p>
+    <p>As listas ficam guardadas dentro deste mesmo repositório. Cole seu token de acesso pra começar — se o site já estiver publicado no GitHub Pages, o resto é preenchido sozinho.</p>
 
     <div class="field">
       <label for="cfgToken">Token de acesso pessoal</label>
       <input type="password" id="cfgToken" placeholder="github_pat_xxxxxxxx" autocomplete="off">
     </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="cfgOwner">Usuário/organização</label>
-        <input type="text" id="cfgOwner" placeholder="ex: joaosilva">
-      </div>
-      <div class="field">
-        <label for="cfgRepo">Repositório</label>
-        <input type="text" id="cfgRepo" placeholder="ex: nossas-listas">
-      </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="cfgBranch">Branch</label>
-        <input type="text" id="cfgBranch" placeholder="main" value="main">
-      </div>
-      <div class="field">
-        <label for="cfgPath">Arquivo de dados</label>
-        <input type="text" id="cfgPath" placeholder="data.json" value="data.json">
-      </div>
-    </div>
 
     <button class="primary-btn" id="connectBtn">Conectar</button>
     <div class="conn-error" id="connError"></div>
 
-    <details class="token-help">
-      <summary>Como criar o token?</summary>
-      <ol>
-        <li>No GitHub, vá em Settings → Developer settings → Fine-grained tokens → Generate new token.</li>
-        <li>Em "Repository access", escolha "Only select repositories" e selecione este repositório.</li>
-        <li>Em "Permissions", dê acesso de leitura e escrita a "Contents".</li>
-        <li>Gere o token e cole ele aqui. Guarde-o em local seguro — ele não aparece de novo depois.</li>
-      </ol>
+    <details class="advanced" id="advancedDetails">
+      <summary>Configuração avançada (repositório, branch, arquivo)</summary>
+      <div class="field-row">
+        <div class="field">
+          <label for="cfgOwner">Usuário/organização</label>
+          <input type="text" id="cfgOwner" placeholder="ex: joaosilva">
+        </div>
+        <div class="field">
+          <label for="cfgRepo">Repositório</label>
+          <input type="text" id="cfgRepo" placeholder="ex: nossas-listas">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="cfgBranch">Branch</label>
+          <input type="text" id="cfgBranch" placeholder="main" value="main">
+        </div>
+        <div class="field">
+          <label for="cfgPath">Arquivo de dados</label>
+          <input type="text" id="cfgPath" placeholder="data.json" value="data.json">
+        </div>
+      </div>
     </details>
   </div>
 
@@ -538,7 +560,7 @@
 
 </main>
 
-<footer>feito com carinho, guardado no GitHub 🌙</footer>
+<footer>feito com carinho 🩷 guardado no GitHub</footer>
 
 <!-- Settings modal -->
 <div class="modal-backdrop" id="settingsModal">
@@ -548,26 +570,29 @@
       <label for="mToken">Token de acesso pessoal</label>
       <input type="password" id="mToken" placeholder="github_pat_xxxxxxxx" autocomplete="off">
     </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="mOwner">Usuário/organização</label>
-        <input type="text" id="mOwner">
+    <details class="advanced" open>
+      <summary>Repositório, branch e arquivo</summary>
+      <div class="field-row">
+        <div class="field">
+          <label for="mOwner">Usuário/organização</label>
+          <input type="text" id="mOwner">
+        </div>
+        <div class="field">
+          <label for="mRepo">Repositório</label>
+          <input type="text" id="mRepo">
+        </div>
       </div>
-      <div class="field">
-        <label for="mRepo">Repositório</label>
-        <input type="text" id="mRepo">
+      <div class="field-row">
+        <div class="field">
+          <label for="mBranch">Branch</label>
+          <input type="text" id="mBranch">
+        </div>
+        <div class="field">
+          <label for="mPath">Arquivo de dados</label>
+          <input type="text" id="mPath">
+        </div>
       </div>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label for="mBranch">Branch</label>
-        <input type="text" id="mBranch">
-      </div>
-      <div class="field">
-        <label for="mPath">Arquivo de dados</label>
-        <input type="text" id="mPath">
-      </div>
-    </div>
+    </details>
     <div class="conn-error" id="modalError"></div>
     <div class="modal-actions">
       <button class="secondary-btn" id="cancelSettings">Cancelar</button>
@@ -577,11 +602,29 @@
   </div>
 </div>
 
+<!-- New list modal -->
+<div class="modal-backdrop" id="newListModal">
+  <div class="modal">
+    <h2>Nova lista</h2>
+    <div class="field">
+      <label for="newListName">Nome</label>
+      <input type="text" id="newListName" placeholder="ex: Filmes, Jogos, Restaurantes..." maxlength="60">
+    </div>
+    <label style="display:block; font-size:12.5px; font-weight:700; color:var(--text-muted); margin-bottom:2px;">Cor</label>
+    <div class="new-list-swatches" id="newListSwatches"></div>
+    <div class="modal-actions">
+      <button class="secondary-btn" id="cancelNewList">Cancelar</button>
+      <button class="primary-btn" id="createNewList">Criar lista</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function () {
   "use strict";
 
   const LS_KEY = "listas-casal-config-v1";
+  const PALETTE = ["#ff8fab", "#ffb37b", "#ffd166", "#7fe3b4", "#7ec8f2", "#c9a6f5"];
 
   const el = (id) => document.getElementById(id);
   const board = el("board");
@@ -593,25 +636,34 @@
   let data = null;        // { lists: [...] }
   let currentSha = null;  // sha of the loaded data.json, for updates
   let saving = false;
-
-  // ---------- palette for list accents ----------
-  const PALETTE = ["#f2637b", "#f2a663", "#e3cf6a", "#6fe3b4", "#69c8e8", "#b498f0"];
-
-  function colorForList(name, id) {
-    let hash = 0;
-    const s = String(id || name || "");
-    for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
-    return PALETTE[hash % PALETTE.length];
-  }
+  let newListColor = PALETTE[0];
 
   function uid() {
     return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  function colorForList(list) {
+    if (list.color) return list.color;
+    let hash = 0;
+    const s = String(list.id || list.name || "");
+    for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+    return PALETTE[hash % PALETTE.length];
   }
 
   // ---------- status pill ----------
   function setStatus(kind, text) {
     statusDot.className = "status-dot" + (kind ? " " + kind : "");
     statusText.textContent = text;
+  }
+
+  // ---------- auto-detect this repo from the page's own URL ----------
+  function autodetectRepo() {
+    const host = location.hostname;
+    if (!host.endsWith(".github.io")) return null;
+    const owner = host.split(".")[0];
+    const parts = location.pathname.split("/").filter(Boolean);
+    const repo = parts.length ? parts[0] : `${owner}.github.io`;
+    return { owner, repo };
   }
 
   // ---------- localStorage config ----------
@@ -621,36 +673,21 @@
       return raw ? JSON.parse(raw) : null;
     } catch (e) { return null; }
   }
-  function persistConfig(cfg) {
-    localStorage.setItem(LS_KEY, JSON.stringify(cfg));
-  }
-  function clearConfig() {
-    localStorage.removeItem(LS_KEY);
-  }
+  function persistConfig(cfg) { localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }
+  function clearConfig() { localStorage.removeItem(LS_KEY); }
 
   // ---------- GitHub API helpers ----------
   function apiUrl() {
     return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${encodeURIComponent(config.path)}`;
   }
-
-  function b64EncodeUtf8(str) {
-    return btoa(unescape(encodeURIComponent(str)));
-  }
-  function b64DecodeUtf8(b64) {
-    return decodeURIComponent(escape(atob(b64)));
-  }
+  function b64EncodeUtf8(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function b64DecodeUtf8(b64) { return decodeURIComponent(escape(atob(b64))); }
 
   async function ghFetchFile() {
     const res = await fetch(apiUrl() + `?ref=${encodeURIComponent(config.branch)}`, {
-      headers: {
-        "Authorization": "Bearer " + config.token,
-        "Accept": "application/vnd.github+json"
-      }
+      headers: { "Authorization": "Bearer " + config.token, "Accept": "application/vnd.github+json" }
     });
-
-    if (res.status === 404) {
-      return { notFound: true };
-    }
+    if (res.status === 404) return { notFound: true };
     if (!res.ok) {
       const body = await res.text().catch(() => "");
       throw new Error(`GitHub respondeu ${res.status} ao buscar o arquivo. ${friendlyGhError(res.status, body)}`);
@@ -677,7 +714,6 @@
       },
       body: JSON.stringify(body)
     });
-
     if (!res.ok) {
       const errBody = await res.text().catch(() => "");
       throw new Error(`GitHub respondeu ${res.status} ao salvar. ${friendlyGhError(res.status, errBody)}`);
@@ -686,13 +722,11 @@
     currentSha = json.content.sha;
   }
 
-  function friendlyGhError(status, body) {
+  function friendlyGhError(status) {
     if (status === 401) return "O token parece inválido ou expirado.";
     if (status === 403) return "Sem permissão suficiente — confira se o token tem acesso de Contents (leitura e escrita) neste repositório.";
-    if (status === 404) return "Repositório, branch ou caminho não encontrado. Confira usuário/repositório/branch.";
-    if (status === 409) {
-      return "Conflito ao salvar (alguém salvou antes de você). Recarregando os dados mais recentes...";
-    }
+    if (status === 404) return "Repositório, branch ou caminho não encontrado. Confira usuário/repositório/branch em 'Configuração avançada'.";
+    if (status === 409) return "Conflito ao salvar (alguém salvou antes de você). Recarregue a página.";
     return "";
   }
 
@@ -724,23 +758,20 @@
     }
   }
 
-  function showConnError(msg) {
-    el("connError").textContent = msg;
-  }
+  function showConnError(msg) { el("connError").textContent = msg; }
 
   // ---------- data mutations ----------
   async function withSave(mutator, message) {
     mutator();
     render();
-    if (saving) return; // a save is already in flight; the next call after it will pick up latest state
+    if (saving) return;
     saving = true;
     setStatus("busy", "salvando...");
     try {
-      // refresh sha right before writing, to reduce collision odds with the other person
       try {
         const latest = await ghFetchFile();
         if (!latest.notFound) currentSha = latest.sha;
-      } catch (e) { /* ignore, we'll try with the sha we have */ }
+      } catch (e) { /* ignore, try with sha we have */ }
 
       await ghSaveFile(data, message);
       setStatus("ok", "salvo");
@@ -753,44 +784,42 @@
     }
   }
 
-  function addList(name) {
+  function addList(name, color) {
     withSave(() => {
-      data.lists.push({ id: uid(), name: name.trim(), items: [] });
+      data.lists.push({ id: uid(), name: name.trim(), color, items: [] });
     }, `Adiciona lista "${name.trim()}"`);
+  }
+
+  function setListColor(listId, color) {
+    const list = data.lists.find(l => l.id === listId);
+    if (!list) return;
+    withSave(() => { list.color = color; }, `Muda a cor de "${list.name}"`);
   }
 
   function deleteList(listId) {
     const list = data.lists.find(l => l.id === listId);
     if (!list) return;
     if (!confirm(`Apagar a lista "${list.name}" e tudo dentro dela?`)) return;
-    withSave(() => {
-      data.lists = data.lists.filter(l => l.id !== listId);
-    }, `Apaga lista "${list.name}"`);
+    withSave(() => { data.lists = data.lists.filter(l => l.id !== listId); }, `Apaga lista "${list.name}"`);
   }
 
   function addItem(listId, text) {
     const list = data.lists.find(l => l.id === listId);
     if (!list) return;
-    withSave(() => {
-      list.items.push({ id: uid(), text: text.trim(), checked: false });
-    }, `Adiciona item em "${list.name}"`);
+    withSave(() => { list.items.push({ id: uid(), text: text.trim(), checked: false }); }, `Adiciona item em "${list.name}"`);
   }
 
   function toggleItem(listId, itemId) {
     const list = data.lists.find(l => l.id === listId);
     const item = list && list.items.find(i => i.id === itemId);
     if (!item) return;
-    withSave(() => {
-      item.checked = !item.checked;
-    }, `${item.checked ? "Marca" : "Desmarca"} item em "${list.name}"`);
+    withSave(() => { item.checked = !item.checked; }, `${item.checked ? "Marca" : "Desmarca"} item em "${list.name}"`);
   }
 
   function deleteItem(listId, itemId) {
     const list = data.lists.find(l => l.id === listId);
     if (!list) return;
-    withSave(() => {
-      list.items = list.items.filter(i => i.id !== itemId);
-    }, `Remove item de "${list.name}"`);
+    withSave(() => { list.items = list.items.filter(i => i.id !== itemId); }, `Remove item de "${list.name}"`);
   }
 
   // ---------- rendering ----------
@@ -798,9 +827,10 @@
     board.innerHTML = "";
 
     data.lists.forEach(list => {
+      const color = colorForList(list);
       const card = document.createElement("div");
       card.className = "list-card";
-      card.style.setProperty("--list-color", colorForList(list.name, list.id));
+      card.style.setProperty("--list-color", color);
 
       const done = list.items.filter(i => i.checked).length;
       const total = list.items.length;
@@ -808,15 +838,36 @@
       const head = document.createElement("div");
       head.className = "list-card-head";
       head.innerHTML = `
-        <div class="list-title-wrap">
-          <h2></h2>
-          <div class="list-progress">${total ? `${done} de ${total} feitas` : "nada aqui ainda"}</div>
+        <div class="list-title-row">
+          <button class="color-dot" title="Mudar cor"></button>
+          <div>
+            <h2></h2>
+            <div class="list-progress">${total ? `${done} de ${total} feitas` : "nada aqui ainda"}</div>
+          </div>
         </div>
-        <button class="list-menu-btn" title="Apagar lista">&times;</button>
+        <div class="list-header-actions">
+          <button class="list-menu-btn" title="Apagar lista">&times;</button>
+        </div>
       `;
       head.querySelector("h2").textContent = list.name;
       head.querySelector(".list-menu-btn").addEventListener("click", () => deleteList(list.id));
       card.appendChild(head);
+
+      const swatchRow = document.createElement("div");
+      swatchRow.className = "color-swatch-row";
+      swatchRow.style.display = "none";
+      PALETTE.forEach(c => {
+        const sw = document.createElement("button");
+        sw.className = "swatch" + (c === color ? " active" : "");
+        sw.style.background = c;
+        sw.addEventListener("click", () => setListColor(list.id, c));
+        swatchRow.appendChild(sw);
+      });
+      card.appendChild(swatchRow);
+
+      head.querySelector(".color-dot").addEventListener("click", () => {
+        swatchRow.style.display = swatchRow.style.display === "none" ? "flex" : "none";
+      });
 
       const itemsWrap = document.createElement("div");
       itemsWrap.className = "items";
@@ -864,10 +915,7 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         const input = form.querySelector("input");
-        if (input.value.trim()) {
-          addItem(list.id, input.value);
-          input.value = "";
-        }
+        if (input.value.trim()) { addItem(list.id, input.value); input.value = ""; }
         input.focus();
       });
       card.appendChild(form);
@@ -878,24 +926,59 @@
     const addCard = document.createElement("button");
     addCard.className = "add-list-card";
     addCard.innerHTML = `<div class="plus">+</div><div>Nova lista</div>`;
-    addCard.addEventListener("click", () => {
-      const name = prompt("Nome da lista (ex: Filmes, Jogos, Restaurantes...)");
-      if (name && name.trim()) addList(name);
-    });
+    addCard.addEventListener("click", openNewListModal);
     board.appendChild(addCard);
   }
 
+  // ---------- new list modal ----------
+  const newListModal = el("newListModal");
+  const newListSwatches = el("newListSwatches");
+
+  PALETTE.forEach((c, i) => {
+    const sw = document.createElement("button");
+    sw.className = "swatch" + (i === 0 ? " active" : "");
+    sw.style.background = c;
+    sw.addEventListener("click", () => {
+      newListColor = c;
+      newListSwatches.querySelectorAll(".swatch").forEach(s => s.classList.remove("active"));
+      sw.classList.add("active");
+    });
+    newListSwatches.appendChild(sw);
+  });
+
+  function openNewListModal() {
+    el("newListName").value = "";
+    newListColor = PALETTE[0];
+    newListSwatches.querySelectorAll(".swatch").forEach((s, i) => s.classList.toggle("active", i === 0));
+    newListModal.classList.add("open");
+    setTimeout(() => el("newListName").focus(), 50);
+  }
+  el("cancelNewList").addEventListener("click", () => newListModal.classList.remove("open"));
+  newListModal.addEventListener("click", (e) => { if (e.target === newListModal) newListModal.classList.remove("open"); });
+  el("createNewList").addEventListener("click", () => {
+    const name = el("newListName").value.trim();
+    if (!name) { el("newListName").focus(); return; }
+    addList(name, newListColor);
+    newListModal.classList.remove("open");
+  });
+  el("newListName").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); el("createNewList").click(); }
+  });
+
   // ---------- wire up connect panel ----------
   el("connectBtn").addEventListener("click", () => {
+    const detected = autodetectRepo();
     const cfg = {
       token: el("cfgToken").value.trim(),
-      owner: el("cfgOwner").value.trim(),
-      repo: el("cfgRepo").value.trim(),
+      owner: el("cfgOwner").value.trim() || (detected && detected.owner) || "",
+      repo: el("cfgRepo").value.trim() || (detected && detected.repo) || "",
       branch: el("cfgBranch").value.trim() || "main",
       path: el("cfgPath").value.trim() || "data.json"
     };
-    if (!cfg.token || !cfg.owner || !cfg.repo) {
-      showConnError("Preencha pelo menos o token, o usuário e o repositório.");
+    if (!cfg.token) { showConnError("Cole o seu token de acesso."); return; }
+    if (!cfg.owner || !cfg.repo) {
+      showConnError("Não consegui identificar o repositório automaticamente — preencha em 'Configuração avançada'.");
+      el("advancedDetails").open = true;
       return;
     }
     showConnError("");
@@ -903,19 +986,19 @@
   });
 
   // ---------- settings modal ----------
-  const modal = el("settingsModal");
+  const settingsModal = el("settingsModal");
   el("settingsBtn").addEventListener("click", () => {
-    const cfg = config || {};
+    const cfg = config || autodetectRepo() || {};
     el("mToken").value = "";
     el("mOwner").value = cfg.owner || "";
     el("mRepo").value = cfg.repo || "";
-    el("mBranch").value = cfg.branch || "main";
-    el("mPath").value = cfg.path || "data.json";
+    el("mBranch").value = (config && config.branch) || "main";
+    el("mPath").value = (config && config.path) || "data.json";
     el("modalError").textContent = "";
-    modal.classList.add("open");
+    settingsModal.classList.add("open");
   });
-  el("cancelSettings").addEventListener("click", () => modal.classList.remove("open"));
-  modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
+  el("cancelSettings").addEventListener("click", () => settingsModal.classList.remove("open"));
+  settingsModal.addEventListener("click", (e) => { if (e.target === settingsModal) settingsModal.classList.remove("open"); });
 
   el("saveSettings").addEventListener("click", async () => {
     const cfg = {
@@ -930,7 +1013,7 @@
       return;
     }
     const ok = await connect(cfg, { silent: false });
-    if (ok) modal.classList.remove("open");
+    if (ok) settingsModal.classList.remove("open");
     else el("modalError").textContent = "Não deu pra conectar — confira os dados.";
   });
 
@@ -942,14 +1025,22 @@
   });
 
   // ---------- boot ----------
+  const detected = autodetectRepo();
+  if (detected) {
+    el("cfgOwner").value = detected.owner;
+    el("cfgRepo").value = detected.repo;
+  } else {
+    el("advancedDetails").open = true;
+  }
+
   const saved = loadConfig();
   if (saved && saved.token) {
     connectPanel.style.display = "none";
     connect(saved, { silent: true }).then(ok => {
       if (!ok) {
         connectPanel.style.display = "block";
-        el("cfgOwner").value = saved.owner || "";
-        el("cfgRepo").value = saved.repo || "";
+        el("cfgOwner").value = saved.owner || (detected && detected.owner) || "";
+        el("cfgRepo").value = saved.repo || (detected && detected.repo) || "";
         el("cfgBranch").value = saved.branch || "main";
         el("cfgPath").value = saved.path || "data.json";
       }
