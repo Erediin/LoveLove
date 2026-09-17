@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coisas pra fazer juntos</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12141c;
+    --surface: #1b1e29;
+    --surface-2: #242837;
+    --border: #323748;
+    --text: #edeef2;
+    --text-muted: #8b90a3;
+    --accent: #f2637b;
+    --accent-soft: rgba(242, 99, 123, .15);
+    --done: #6fe3b4;
+    --radius: 14px;
+    --font-display: "Fraunces", serif;
+    --font-body: "Manrope", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  a { color: inherit; }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  ::selection { background: var(--accent-soft); }
+
+  /* ---------- Top bar ---------- */
+
+  header.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px clamp(20px, 5vw, 56px) 10px;
+    gap: 16px;
+  }
+
+  .brand h1 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 34px);
+    margin: 0 0 2px;
+    letter-spacing: .2px;
+  }
+
+  .brand p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    flex-shrink: 0;
+  }
+  .status-dot.ok { background: var(--done); }
+  .status-dot.busy { background: #f2c063; animation: pulse 1s infinite ease-in-out; }
+  .status-dot.error { background: var(--accent); }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--text); }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  /* ---------- Board ---------- */
+
+  main {
+    flex: 1;
+    padding: 20px clamp(20px, 5vw, 56px) 60px;
+  }
+
+  .board {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .list-card {
+    width: 300px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    border-top: 3px solid var(--list-color, var(--accent));
+    padding: 18px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .list-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .list-title-wrap { min-width: 0; }
+
+  .list-card h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 19px;
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .list-progress {
+    margin-top: 3px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .list-menu-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .list-menu-btn:hover { color: var(--accent); background: var(--surface-2); }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 4px;
+  }
+
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 4px;
+    border-radius: 8px;
+    transition: background .12s;
+  }
+  .item:hover { background: var(--surface-2); }
+  .item:hover .item-delete { opacity: 1; }
+
+  .item-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 19px;
+    height: 19px;
+    min-width: 19px;
+    margin-top: 1px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color .15s, background .15s;
+  }
+  .item-check:hover { border-color: var(--done); }
+  .item-check:checked {
+    background: var(--done);
+    border-color: var(--done);
+  }
+  .item-check:checked::after {
+    content: "";
+    width: 5px;
+    height: 9px;
+    border-right: 2px solid #12141c;
+    border-bottom: 2px solid #12141c;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .item-text {
+    flex: 1;
+    font-size: 14.5px;
+    line-height: 1.4;
+    word-break: break-word;
+    padding-top: 1px;
+  }
+
+  .item.done .item-text {
+    color: var(--text-muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border);
+  }
+
+  .item-delete {
+    opacity: 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 16px;
+    padding: 0 4px;
+    transition: opacity .12s, color .12s;
+  }
+  .item-delete:hover { color: var(--accent); }
+
+  .add-item-form {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .add-item-form input {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 13.5px;
+    font-family: inherit;
+  }
+  .add-item-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .add-item-form button {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    width: 34px;
+    font-size: 16px;
+  }
+  .add-item-form button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .empty-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 4px;
+  }
+
+  /* Add list card */
+  .add-list-card {
+    width: 300px;
+    min-height: 120px;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    transition: border-color .15s, color .15s;
+  }
+  .add-list-card:hover { border-color: var(--accent); color: var(--text); }
+  .add-list-card .plus {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+  }
+
+  /* ---------- Empty / not-connected state ---------- */
+
+  .connect-panel {
+    max-width: 480px;
+    margin: 40px auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 26px;
+  }
+
+  .connect-panel h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 21px;
+    margin: 0 0 6px;
+  }
+
+  .connect-panel > p {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 20px;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+  .field label {
+    display: block;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+  .field input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 9px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .field input:focus { outline: none; border-color: var(--accent); }
+  .field small { color: var(--text-muted); font-size: 11.5px; }
+
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+
+  .primary-btn {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    color: #1a0d10;
+    font-weight: 700;
+    font-size: 14.5px;
+    padding: 11px;
+    border-radius: 9px;
+    margin-top: 4px;
+  }
+  .primary-btn:hover { filter: brightness(1.08); }
+  .primary-btn:disabled { opacity: .6; cursor: default; }
+
+  .conn-error {
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 12px;
+    line-height: 1.4;
+  }
+
+  details.token-help {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  details.token-help summary { cursor: pointer; color: var(--text); }
+  details.token-help ol { padding-left: 18px; line-height: 1.6; }
+
+  /* ---------- Settings modal ---------- */
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 7, 11, .6);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8vh 20px;
+    z-index: 50;
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    width: 100%;
+    max-width: 440px;
+    padding: 24px;
+  }
+  .modal h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    margin: 0 0 16px;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .modal-actions .primary-btn { margin-top: 0; }
+  .secondary-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 9px;
+    padding: 11px;
+    font-size: 14px;
+  }
+  .secondary-btn:hover { color: var(--text); border-color: var(--text-muted); }
+
+  .forget-link {
+    display: block;
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    text-decoration: underline;
+    background: none;
+    border: none;
+    width: 100%;
+  }
+  .forget-link:hover { color: var(--accent); }
+
+  footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    padding: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .list-card, .add-list-card { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <h1>Coisas pra fazer juntos</h1>
+    <p id="subtitle">jogos, filmes e tudo mais que a gente quer riscar da lista</p>
+  </div>
+  <div class="topbar-actions">
+    <div class="status-pill" id="statusPill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">desconectado</span>
+    </div>
+    <button class="icon-btn" id="settingsBtn" title="Configurações">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+
+  <!-- Not connected yet -->
+  <div class="connect-panel" id="connectPanel">
+    <h2>Conectar ao GitHub</h2>
+    <p>As listas ficam guardadas num arquivo dentro de um repositório do GitHub. Preencha os dados abaixo pra conectar — cada pessoa faz isso uma vez no próprio navegador.</p>
+
+    <div class="field">
+      <label for="cfgToken">Token de acesso pessoal</label>
+      <input type="password" id="cfgToken" placeholder="github_pat_xxxxxxxx" autocomplete="off">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="cfgOwner">Usuário/organização</label>
+        <input type="text" id="cfgOwner" placeholder="ex: joaosilva">
+      </div>
+      <div class="field">
+        <label for="cfgRepo">Repositório</label>
+        <input type="text" id="cfgRepo" placeholder="ex: nossas-listas">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="cfgBranch">Branch</label>
+        <input type="text" id="cfgBranch" placeholder="main" value="main">
+      </div>
+      <div class="field">
+        <label for="cfgPath">Arquivo de dados</label>
+        <input type="text" id="cfgPath" placeholder="data.json" value="data.json">
+      </div>
+    </div>
+
+    <button class="primary-btn" id="connectBtn">Conectar</button>
+    <div class="conn-error" id="connError"></div>
+
+    <details class="token-help">
+      <summary>Como criar o token?</summary>
+      <ol>
+        <li>No GitHub, vá em Settings → Developer settings → Fine-grained tokens → Generate new token.</li>
+        <li>Em "Repository access", escolha "Only select repositories" e selecione este repositório.</li>
+        <li>Em "Permissions", dê acesso de leitura e escrita a "Contents".</li>
+        <li>Gere o token e cole ele aqui. Guarde-o em local seguro — ele não aparece de novo depois.</li>
+      </ol>
+    </details>
+  </div>
+
+  <!-- Board -->
+  <div class="board" id="board" style="display:none;"></div>
+
+</main>
+
+<footer>feito com carinho, guardado no GitHub 🌙</footer>
+
+<!-- Settings modal -->
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>Configurações</h2>
+    <div class="field">
+      <label for="mToken">Token de acesso pessoal</label>
+      <input type="password" id="mToken" placeholder="github_pat_xxxxxxxx" autocomplete="off">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="mOwner">Usuário/organização</label>
+        <input type="text" id="mOwner">
+      </div>
+      <div class="field">
+        <label for="mRepo">Repositório</label>
+        <input type="text" id="mRepo">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="mBranch">Branch</label>
+        <input type="text" id="mBranch">
+      </div>
+      <div class="field">
+        <label for="mPath">Arquivo de dados</label>
+        <input type="text" id="mPath">
+      </div>
+    </div>
+    <div class="conn-error" id="modalError"></div>
+    <div class="modal-actions">
+      <button class="secondary-btn" id="cancelSettings">Cancelar</button>
+      <button class="primary-btn" id="saveSettings">Salvar e reconectar</button>
+    </div>
+    <button class="forget-link" id="forgetBtn">Esquecer dados salvos neste navegador</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const LS_KEY = "listas-casal-config-v1";
+
+  const el = (id) => document.getElementById(id);
+  const board = el("board");
+  const connectPanel = el("connectPanel");
+  const statusDot = el("statusDot");
+  const statusText = el("statusText");
+
+  let config = null;      // { token, owner, repo, branch, path }
+  let data = null;        // { lists: [...] }
+  let currentSha = null;  // sha of the loaded data.json, for updates
+  let saving = false;
+
+  // ---------- palette for list accents ----------
+  const PALETTE = ["#f2637b", "#f2a663", "#e3cf6a", "#6fe3b4", "#69c8e8", "#b498f0"];
+
+  function colorForList(name, id) {
+    let hash = 0;
+    const s = String(id || name || "");
+    for (let i = 0; i < s.length; i++) hash = (hash * 31 + s.charCodeAt(i)) >>> 0;
+    return PALETTE[hash % PALETTE.length];
+  }
+
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
+  // ---------- status pill ----------
+  function setStatus(kind, text) {
+    statusDot.className = "status-dot" + (kind ? " " + kind : "");
+    statusText.textContent = text;
+  }
+
+  // ---------- localStorage config ----------
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function persistConfig(cfg) {
+    localStorage.setItem(LS_KEY, JSON.stringify(cfg));
+  }
+  function clearConfig() {
+    localStorage.removeItem(LS_KEY);
+  }
+
+  // ---------- GitHub API helpers ----------
+  function apiUrl() {
+    return `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${encodeURIComponent(config.path)}`;
+  }
+
+  function b64EncodeUtf8(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  function b64DecodeUtf8(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  async function ghFetchFile() {
+    const res = await fetch(apiUrl() + `?ref=${encodeURIComponent(config.branch)}`, {
+      headers: {
+        "Authorization": "Bearer " + config.token,
+        "Accept": "application/vnd.github+json"
+      }
+    });
+
+    if (res.status === 404) {
+      return { notFound: true };
+    }
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`GitHub respondeu ${res.status} ao buscar o arquivo. ${friendlyGhError(res.status, body)}`);
+    }
+    const json = await res.json();
+    const content = JSON.parse(b64DecodeUtf8(json.content.replace(/\n/g, "")));
+    return { content, sha: json.sha };
+  }
+
+  async function ghSaveFile(newData, message) {
+    const body = {
+      message: message || "Atualiza listas",
+      content: b64EncodeUtf8(JSON.stringify(newData, null, 2)),
+      branch: config.branch
+    };
+    if (currentSha) body.sha = currentSha;
+
+    const res = await fetch(apiUrl(), {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + config.token,
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => "");
+      throw new Error(`GitHub respondeu ${res.status} ao salvar. ${friendlyGhError(res.status, errBody)}`);
+    }
+    const json = await res.json();
+    currentSha = json.content.sha;
+  }
+
+  function friendlyGhError(status, body) {
+    if (status === 401) return "O token parece inválido ou expirado.";
+    if (status === 403) return "Sem permissão suficiente — confira se o token tem acesso de Contents (leitura e escrita) neste repositório.";
+    if (status === 404) return "Repositório, branch ou caminho não encontrado. Confira usuário/repositório/branch.";
+    if (status === 409) {
+      return "Conflito ao salvar (alguém salvou antes de você). Recarregando os dados mais recentes...";
+    }
+    return "";
+  }
+
+  // ---------- connection flow ----------
+  async function connect(cfg, { silent } = {}) {
+    config = cfg;
+    setStatus("busy", "conectando...");
+    try {
+      const result = await ghFetchFile();
+      if (result.notFound) {
+        data = { lists: [] };
+        currentSha = null;
+        await ghSaveFile(data, "Cria arquivo de listas");
+        setStatus("ok", "conectado");
+      } else {
+        data = result.content && Array.isArray(result.content.lists) ? result.content : { lists: [] };
+        currentSha = result.sha;
+        setStatus("ok", "conectado");
+      }
+      persistConfig(cfg);
+      connectPanel.style.display = "none";
+      board.style.display = "flex";
+      render();
+      return true;
+    } catch (err) {
+      setStatus("error", "erro de conexão");
+      if (!silent) showConnError(err.message);
+      return false;
+    }
+  }
+
+  function showConnError(msg) {
+    el("connError").textContent = msg;
+  }
+
+  // ---------- data mutations ----------
+  async function withSave(mutator, message) {
+    mutator();
+    render();
+    if (saving) return; // a save is already in flight; the next call after it will pick up latest state
+    saving = true;
+    setStatus("busy", "salvando...");
+    try {
+      // refresh sha right before writing, to reduce collision odds with the other person
+      try {
+        const latest = await ghFetchFile();
+        if (!latest.notFound) currentSha = latest.sha;
+      } catch (e) { /* ignore, we'll try with the sha we have */ }
+
+      await ghSaveFile(data, message);
+      setStatus("ok", "salvo");
+    } catch (err) {
+      setStatus("error", "erro ao salvar");
+      console.error(err);
+      alert("Não deu pra salvar agora: " + err.message);
+    } finally {
+      saving = false;
+    }
+  }
+
+  function addList(name) {
+    withSave(() => {
+      data.lists.push({ id: uid(), name: name.trim(), items: [] });
+    }, `Adiciona lista "${name.trim()}"`);
+  }
+
+  function deleteList(listId) {
+    const list = data.lists.find(l => l.id === listId);
+    if (!list) return;
+    if (!confirm(`Apagar a lista "${list.name}" e tudo dentro dela?`)) return;
+    withSave(() => {
+      data.lists = data.lists.filter(l => l.id !== listId);
+    }, `Apaga lista "${list.name}"`);
+  }
+
+  function addItem(listId, text) {
+    const list = data.lists.find(l => l.id === listId);
+    if (!list) return;
+    withSave(() => {
+      list.items.push({ id: uid(), text: text.trim(), checked: false });
+    }, `Adiciona item em "${list.name}"`);
+  }
+
+  function toggleItem(listId, itemId) {
+    const list = data.lists.find(l => l.id === listId);
+    const item = list && list.items.find(i => i.id === itemId);
+    if (!item) return;
+    withSave(() => {
+      item.checked = !item.checked;
+    }, `${item.checked ? "Marca" : "Desmarca"} item em "${list.name}"`);
+  }
+
+  function deleteItem(listId, itemId) {
+    const list = data.lists.find(l => l.id === listId);
+    if (!list) return;
+    withSave(() => {
+      list.items = list.items.filter(i => i.id !== itemId);
+    }, `Remove item de "${list.name}"`);
+  }
+
+  // ---------- rendering ----------
+  function render() {
+    board.innerHTML = "";
+
+    data.lists.forEach(list => {
+      const card = document.createElement("div");
+      card.className = "list-card";
+      card.style.setProperty("--list-color", colorForList(list.name, list.id));
+
+      const done = list.items.filter(i => i.checked).length;
+      const total = list.items.length;
+
+      const head = document.createElement("div");
+      head.className = "list-card-head";
+      head.innerHTML = `
+        <div class="list-title-wrap">
+          <h2></h2>
+          <div class="list-progress">${total ? `${done} de ${total} feitas` : "nada aqui ainda"}</div>
+        </div>
+        <button class="list-menu-btn" title="Apagar lista">&times;</button>
+      `;
+      head.querySelector("h2").textContent = list.name;
+      head.querySelector(".list-menu-btn").addEventListener("click", () => deleteList(list.id));
+      card.appendChild(head);
+
+      const itemsWrap = document.createElement("div");
+      itemsWrap.className = "items";
+
+      const sorted = [...list.items].sort((a, b) => Number(a.checked) - Number(b.checked));
+
+      if (!sorted.length) {
+        const hint = document.createElement("div");
+        hint.className = "empty-hint";
+        hint.textContent = "adicione a primeira coisa aí embaixo";
+        itemsWrap.appendChild(hint);
+      }
+
+      sorted.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "item" + (item.checked ? " done" : "");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "item-check";
+        checkbox.checked = item.checked;
+        checkbox.addEventListener("change", () => toggleItem(list.id, item.id));
+
+        const text = document.createElement("div");
+        text.className = "item-text";
+        text.textContent = item.text;
+
+        const del = document.createElement("button");
+        del.className = "item-delete";
+        del.title = "Remover";
+        del.innerHTML = "&times;";
+        del.addEventListener("click", () => deleteItem(list.id, item.id));
+
+        row.appendChild(checkbox);
+        row.appendChild(text);
+        row.appendChild(del);
+        itemsWrap.appendChild(row);
+      });
+
+      card.appendChild(itemsWrap);
+
+      const form = document.createElement("form");
+      form.className = "add-item-form";
+      form.innerHTML = `<input type="text" placeholder="adicionar..." maxlength="200"><button type="submit">+</button>`;
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const input = form.querySelector("input");
+        if (input.value.trim()) {
+          addItem(list.id, input.value);
+          input.value = "";
+        }
+        input.focus();
+      });
+      card.appendChild(form);
+
+      board.appendChild(card);
+    });
+
+    const addCard = document.createElement("button");
+    addCard.className = "add-list-card";
+    addCard.innerHTML = `<div class="plus">+</div><div>Nova lista</div>`;
+    addCard.addEventListener("click", () => {
+      const name = prompt("Nome da lista (ex: Filmes, Jogos, Restaurantes...)");
+      if (name && name.trim()) addList(name);
+    });
+    board.appendChild(addCard);
+  }
+
+  // ---------- wire up connect panel ----------
+  el("connectBtn").addEventListener("click", () => {
+    const cfg = {
+      token: el("cfgToken").value.trim(),
+      owner: el("cfgOwner").value.trim(),
+      repo: el("cfgRepo").value.trim(),
+      branch: el("cfgBranch").value.trim() || "main",
+      path: el("cfgPath").value.trim() || "data.json"
+    };
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      showConnError("Preencha pelo menos o token, o usuário e o repositório.");
+      return;
+    }
+    showConnError("");
+    connect(cfg);
+  });
+
+  // ---------- settings modal ----------
+  const modal = el("settingsModal");
+  el("settingsBtn").addEventListener("click", () => {
+    const cfg = config || {};
+    el("mToken").value = "";
+    el("mOwner").value = cfg.owner || "";
+    el("mRepo").value = cfg.repo || "";
+    el("mBranch").value = cfg.branch || "main";
+    el("mPath").value = cfg.path || "data.json";
+    el("modalError").textContent = "";
+    modal.classList.add("open");
+  });
+  el("cancelSettings").addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("open"); });
+
+  el("saveSettings").addEventListener("click", async () => {
+    const cfg = {
+      token: el("mToken").value.trim() || (config && config.token) || "",
+      owner: el("mOwner").value.trim(),
+      repo: el("mRepo").value.trim(),
+      branch: el("mBranch").value.trim() || "main",
+      path: el("mPath").value.trim() || "data.json"
+    };
+    if (!cfg.token || !cfg.owner || !cfg.repo) {
+      el("modalError").textContent = "Preencha pelo menos o token, o usuário e o repositório.";
+      return;
+    }
+    const ok = await connect(cfg, { silent: false });
+    if (ok) modal.classList.remove("open");
+    else el("modalError").textContent = "Não deu pra conectar — confira os dados.";
+  });
+
+  el("forgetBtn").addEventListener("click", () => {
+    if (confirm("Isso apaga o token e a configuração salvos neste navegador (os dados no GitHub continuam intactos). Continuar?")) {
+      clearConfig();
+      location.reload();
+    }
+  });
+
+  // ---------- boot ----------
+  const saved = loadConfig();
+  if (saved && saved.token) {
+    connectPanel.style.display = "none";
+    connect(saved, { silent: true }).then(ok => {
+      if (!ok) {
+        connectPanel.style.display = "block";
+        el("cfgOwner").value = saved.owner || "";
+        el("cfgRepo").value = saved.repo || "";
+        el("cfgBranch").value = saved.branch || "main";
+        el("cfgPath").value = saved.path || "data.json";
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
