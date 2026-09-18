@@ -48,7 +48,13 @@
       "id": "mu6byjaijz36sj",
       "name": "Séries ¬w¬",
       "color": "#ff8fab",
-      "items": []
+      "items": [
+        {
+          "id": "mu6byr9kgvrzd6",
+          "text": "Vox Machina",
+          "checked": false
+        }
+      ]
     }
   ]
 }
