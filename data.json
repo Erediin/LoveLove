@@ -24,6 +24,11 @@
           "id": "mu5dx867j3zzfd",
           "text": "Avatar 3",
           "checked": true
+        },
+        {
+          "id": "mu6ubi79pm776m",
+          "text": "Harry Potters",
+          "checked": false
         }
       ]
     },
