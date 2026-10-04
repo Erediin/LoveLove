@@ -90,6 +90,11 @@
           "id": "mutilvy60zfs4z",
           "text": "DA Veilguard",
           "checked": false
+        },
+        {
+          "id": "mutim8xgvtwr3l",
+          "text": "DA Inquisition",
+          "checked": false
         }
       ]
     }
