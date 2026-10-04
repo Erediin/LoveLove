@@ -85,7 +85,13 @@
       "id": "mutilcv5zbpu4g",
       "name": "Akami jogos",
       "color": "#ff8fab",
-      "items": []
+      "items": [
+        {
+          "id": "mutilvy60zfs4z",
+          "text": "DA Veilguard",
+          "checked": false
+        }
+      ]
     }
   ]
 }
